@@ -70,3 +70,26 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Unity3D generated file on crash reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# ECS specific
+*.entities
+*.entities.meta
+*.subscene
+*.subscene.meta
+EntitiesForEach/
+
+# Project specific
+/[Aa]ssets/[Ss]treamingAssets/
+/[Aa]ssets/[Ss]treamingAssets.meta
