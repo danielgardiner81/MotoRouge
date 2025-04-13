@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d78dd3f37b24d699d498dc72be8c340, type: 3}
+  m_Name: Front Fork
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  mesh: {fileID: -893020243073996223, guid: 2930e6c298cec974dba19bd11c6dce74, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: 14742b5fed8929b4e8248bd62224c5f0, type: 2}
+  description: 
+  mass: 1
+  useGravity: 1
+  friction: 0.5
+  physics:
+    drag: 0.1
+    angularDrag: 0.05
+    physicsMaterial: {fileID: 0}
+    freezeRotation: 0
+    lockedRotationAxes:
+      x: 0
+      y: 0
+      z: 0
+  scaling:
+    mode: 0
+    uniformScale: 1
+    nonUniformScale: {x: 1, y: 1, z: 1}
+    scaleLimit: {x: 0.1, y: 5}
+  connectionPreset: 0
+  connections:
+  - id: Left
+    type: 0
+    localPosition: {x: -0.005958347, y: 0, z: 0}
+    direction: {x: -1, y: 0, z: 0}
+    radius: 0.0021561622
+    hingeAxis: {x: 0, y: 1, z: 0}
+    hingeLimit: {x: 0, y: 360}
+    maxTwistAngle: 60
+  - id: Right
+    type: 0
+    localPosition: {x: 0.005958347, y: 0, z: 0}
+    direction: {x: 1, y: 0, z: 0}
+    radius: 0.0021561622
+    hingeAxis: {x: 0, y: 1, z: 0}
+    hingeLimit: {x: 0, y: 360}
+    maxTwistAngle: 60

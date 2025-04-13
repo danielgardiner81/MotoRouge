@@ -15,7 +15,7 @@ public class BUImporter : AssetPostprocessor
 
     void OnPostprocessGameObjectWithUserProperties(GameObject obj, string[] propNames, object[] values)
     {
-        for (int i = 0; i < propNames.Length; i++)
+        for (var i = 0; i < propNames.Length; i++)
         {
             if (propNames[i] == "shader_type")
             {
@@ -23,7 +23,7 @@ public class BUImporter : AssetPostprocessor
             }
             else if (propNames[i] == "material_info")
             {
-                string materialInfoJson = values[i].ToString(); // Log the received JSON string
+                var materialInfoJson = values[i].ToString(); // Log the received JSON string
                 // Deserialize the JSON string using Newtonsoft.Json
                 materialInfo = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(materialInfoJson);
             }
@@ -45,11 +45,11 @@ public class BUImporter : AssetPostprocessor
     void OnPostprocessModel(GameObject obj)
     {
         // Store the name of the object
-        string objName = obj.name;
+        var objName = obj.name;
         if (objName.Contains("_LOD"))
         {
             // Split the name into parts using '_LOD' as the separator
-            string[] parts = objName.Split(new string[] { "_LOD" }, StringSplitOptions.None);
+            var parts = objName.Split(new string[] { "_LOD" }, StringSplitOptions.None);
 
             // Use the first part of the name (before '_LOD')
             objName = parts[0];
@@ -58,7 +58,7 @@ public class BUImporter : AssetPostprocessor
         // Apply collider component to the model
         ApplyCollider(obj.transform);
 
-        ModelImporter modelImporter = assetImporter as ModelImporter;
+        var modelImporter = assetImporter as ModelImporter;
         modelImporter.SearchAndRemapMaterials(ModelImporterMaterialName.BasedOnMaterialName, ModelImporterMaterialSearch.Everywhere);
 
         // Force re-import of the asset to refresh the model
@@ -66,8 +66,8 @@ public class BUImporter : AssetPostprocessor
         AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
 
         // Use the stored object name
-        string materialDirectory = Path.Combine("Assets/Materials");
-        string textureDirectory = Path.Combine("Assets/Textures");
+        var materialDirectory = Path.Combine("Assets/Materials");
+        var textureDirectory = Path.Combine("Assets/Textures");
 
         // Check if the directory exists, if not, create it
         if (!Directory.Exists(materialDirectory))
@@ -119,7 +119,7 @@ public class BUImporter : AssetPostprocessor
 
     void ExtractTextures(string assetPath, string textureDirectory)
     {
-        ModelImporter modelImporter = AssetImporter.GetAtPath(assetPath) as ModelImporter;
+        var modelImporter = AssetImporter.GetAtPath(assetPath) as ModelImporter;
         if (modelImporter != null && !string.IsNullOrEmpty(textureDirectory))
         {
             modelImporter.ExtractTextures(textureDirectory);
@@ -128,18 +128,18 @@ public class BUImporter : AssetPostprocessor
 
     void ExtractMaterials(string assetPath, string destinationPath)
     {
-        HashSet<string> hashSet = new HashSet<string>();
-        IEnumerable<UnityEngine.Object> enumerable = from x in AssetDatabase.LoadAllAssetsAtPath(assetPath)
+        var hashSet = new HashSet<string>();
+        var enumerable = from x in AssetDatabase.LoadAllAssetsAtPath(assetPath)
                                                      where x.GetType() == typeof(Material)
                                                      select x;
-        foreach (UnityEngine.Object item in enumerable)
+        foreach (var item in enumerable)
         {
-            string materialPath = Path.Combine(destinationPath, item.name) + ".mat";
+            var materialPath = Path.Combine(destinationPath, item.name) + ".mat";
             if (File.Exists(materialPath))
             {
                 // Material already exists, skip extraction
                 // Debug.Log("Material already exists: " + materialPath);
-                Material existingMaterial = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+                var existingMaterial = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
                 if (existingMaterial != null)
                 {
                     extractedMaterials.Add(existingMaterial);
@@ -148,12 +148,12 @@ public class BUImporter : AssetPostprocessor
             }
 
             // Generate a unique asset path
-            string uniquePath = AssetDatabase.GenerateUniqueAssetPath(materialPath);
-            string value = AssetDatabase.ExtractAsset(item, uniquePath);
+            var uniquePath = AssetDatabase.GenerateUniqueAssetPath(materialPath);
+            var value = AssetDatabase.ExtractAsset(item, uniquePath);
             if (string.IsNullOrEmpty(value))
             {
                 hashSet.Add(assetPath);
-                Material extractedMaterial = AssetDatabase.LoadAssetAtPath<Material>(uniquePath);
+                var extractedMaterial = AssetDatabase.LoadAssetAtPath<Material>(uniquePath);
                 if (extractedMaterial != null)
                 {
                     extractedMaterials.Add(extractedMaterial);
@@ -161,7 +161,7 @@ public class BUImporter : AssetPostprocessor
             }
         }
 
-        foreach (string item2 in hashSet)
+        foreach (var item2 in hashSet)
         {
             AssetDatabase.WriteImportSettingsIfDirty(item2);
             AssetDatabase.ImportAsset(item2, ImportAssetOptions.ForceUpdate);
@@ -175,17 +175,17 @@ public class BUImporter : AssetPostprocessor
         {
             foreach (var kvp in materialInfo)
             {
-                string materialName = kvp.Key;
-                List<string> textureNamesList = kvp.Value;
+                var materialName = kvp.Key;
+                var textureNamesList = kvp.Value;
                 // Convert List<string> to string[]
-                string[] textureNames = textureNamesList.ToArray();
+                var textureNames = textureNamesList.ToArray();
 
                 // Get the material from the Materials folder
-                string[] guids = AssetDatabase.FindAssets(materialName + " t:Material", new[] { "Assets/Materials" });
+                var guids = AssetDatabase.FindAssets(materialName + " t:Material", new[] { "Assets/Materials" });
                 if (guids.Length > 0)
                 {
-                    string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                    Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+                    var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                    var material = AssetDatabase.LoadAssetAtPath<Material>(path);
 
                     if (material != null)
                     {
@@ -245,25 +245,25 @@ public class BUImporter : AssetPostprocessor
         var occlusionKeywords = new List<string> { "occlusion", "ambientocclusion", "ao", "ambient" };
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (albedoKeywords.Any(keyword => type.Contains(keyword)))
@@ -314,25 +314,25 @@ public class BUImporter : AssetPostprocessor
         var occlusionKeywords = new List<string> { "occlusion", "ambientocclusion", "ao", "ambient" };
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (albedoKeywords.Any(keyword => type.Contains(keyword)))
@@ -384,25 +384,25 @@ public class BUImporter : AssetPostprocessor
         var occlusionKeywords = new List<string> { "occlusion", "ambientocclusion", "ao", "ambient" };
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (albedoKeywords.Any(keyword => type.Contains(keyword)))
@@ -458,25 +458,25 @@ public class BUImporter : AssetPostprocessor
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
         var occlusionKeywords = new List<string> { "occlusion", "ambientocclusion", "ao", "ambient" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (baseColorKeywords.Any(keyword => type.Contains(keyword)))
@@ -531,25 +531,25 @@ public class BUImporter : AssetPostprocessor
         var occlusionKeywords = new List<string> { "occlusion", "ambientocclusion", "ao", "ambient" };
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (albedoKeywords.Any(keyword => type.Contains(keyword)))
@@ -601,25 +601,25 @@ public class BUImporter : AssetPostprocessor
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
         var occlusionKeywords = new List<string> { "occlusion", "ambientocclusion", "ao", "ambient" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (baseColorKeywords.Any(keyword => type.Contains(keyword)))
@@ -675,25 +675,25 @@ public class BUImporter : AssetPostprocessor
         var detailKeywords = new List<string> { "detail" };
         var emissionKeywords = new List<string> { "emission", "emissive", "glow" };
 
-        foreach (string textureName in textureNames)
+        foreach (var textureName in textureNames)
         {
             // Find the texture asset by name in the Textures folder
-            string[] guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
+            var guids = AssetDatabase.FindAssets(textureName + " t:Texture", new[] { "Assets/Textures" });
             if (guids.Length > 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
 
                 if (texture != null)
                 {
                     // Split the texture name into parts
-                    string[] textureParts = textureName.ToLower().Split('_');
+                    var textureParts = textureName.ToLower().Split('_');
 
                     // Check if the base name of the texture matches the base name of the material
                     if (textureParts.Length > 0)
                     {
                         // Get the type of the texture
-                        string type = textureParts[textureParts.Length - 1];
+                        var type = textureParts[textureParts.Length - 1];
 
                         // Check if the type contains any of the keywords
                         if (baseKeywords.Any(keyword => type.Contains(keyword)))

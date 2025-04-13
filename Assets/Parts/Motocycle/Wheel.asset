@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d78dd3f37b24d699d498dc72be8c340, type: 3}
+  m_Name: Wheel
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  mesh: {fileID: -8852134876535906372, guid: f6138808e6daea54282009dbaae800e7, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: c0cebd11815eea64581ad62b58b2c423, type: 2}
+  description: Basic motorcycle wheel
+  mass: 1
+  useGravity: 1
+  friction: 0.5
+  physics:
+    drag: 0.1
+    angularDrag: 0.05
+    physicsMaterial: {fileID: 0}
+    freezeRotation: 0
+    lockedRotationAxes:
+      x: 0
+      y: 0
+      z: 0
+  scaling:
+    mode: 0
+    uniformScale: 1
+    nonUniformScale: {x: 1, y: 1, z: 1}
+    scaleLimit: {x: 0.1, y: 5}
+  connectionPreset: 5
+  connections:
+  - id: Center
+    type: 0
+    localPosition: {x: -0.000000029802322, y: 0, z: 0}
+    direction: {x: 0, y: 1, z: 0}
+    radius: 0.25282562
+    hingeAxis: {x: 0, y: 1, z: 0}
+    hingeLimit: {x: 0, y: 360}
+    maxTwistAngle: 60
